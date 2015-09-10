@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+	<title>Plot me!</title>
+	<style>
+		.center {
+		    display: block;
+		    margin-left: auto;
+		    margin-right: auto;
+		}
+		#inner1{
+			float:left; 
+		}
+		#chart_div{
+			float:left; 
+			clear: left;
+		}
+	</style>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript">
+			// Load the Visualization API and the piechart package.
+			google.load('visualization', '1.0', {
+			'packages' : [ 'corechart' ]
+			});
+			
+			// Set a callback to run when the Google Visualization API is loaded.
+			google.setOnLoadCallback(drawChart);
+			
+			// Callback that creates and populates a data table,
+			// instantiates the pie chart, passes in the data and
+			// draws it.
+			
+			if(#{graphPlotterBean.lineChartData} != ''){
+				function drawChart() {
+				// Create the data table.
+				var data = google.visualization.arrayToDataTable([
+				    [ 'X', 'Y' ],#{graphPlotterBean.lineChartData}]);
+				
+				// Set chart options
+				var options = {
+				  width:800,
+	              height:800,
+		          title: 'Graph',
+		          curveType: 'function',
+		          legend: { position: 'bottom' },
+		          hAxis: {
+		              ticks: [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10]
+		          },
+		          vAxis:{
+		              ticks: [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10]
+		          }
+		        };
+				
+				// Instantiate and draw our chart, passing in some options.
+				var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+				chart.draw(data, options);
+				}
+			}
+	</script>
+</h:head>
+	<h:body>
+		<h:form>
+			<div class="center" id="inner1">
+				<h:outputLabel value="Expression" style="padding: 20px;"/>
+				<h:inputText  value="#{graphPlotterBean.expression}"/>
+				<h:commandButton value="Plot Me" action="#{graphPlotterBean.plotGraph}" style="padding-left: 20px;"/>
+			</div>
+			<div id="chart_div"></div>	
+		</h:form>
+	</h:body>
+</html>
